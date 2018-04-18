@@ -3,6 +3,16 @@
 require "net/https"
 
 class PushMore
+  # Send notifcations to Telegram through PushMore.io
+  #
+  # Example:
+  #   >> PushMore.new("hello world!", key: "foobar123").deliver
+  #   => true
+  #
+  # Arguments:
+  #   body: (String)
+  #   key: (String)
+
   WEBHOOK_BASE_URL = "https://pushmore.io/webhook/"
 
   def initialize(body, key: ENV.fetch("PUSH_MORE_KEY"))
