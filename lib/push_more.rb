@@ -1,8 +1,17 @@
 # frozen_string_literal: true
 
 require "net/https"
+require "ostruct"
 
 class PushMore
+  def self.configuration
+    @configuration ||= OpenStruct.new
+  end
+
+  def self.configure
+    yield(configuration)
+  end
+
   # Send notifcations to Telegram through PushMore.io
   #
   # Example:
@@ -15,9 +24,9 @@ class PushMore
 
   WEBHOOK_BASE_URL = "https://pushmore.io/webhook/"
 
-  def initialize(body, key: ENV.fetch("PUSH_MORE_KEY"))
+  def initialize(body, key: nil)
     @body = body
-    @key = key
+    @key = key || PushMore.configuration.api_key || ENV.fetch("PUSH_MORE_KEY")
   end
 
   def deliver
