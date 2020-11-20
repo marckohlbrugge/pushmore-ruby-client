@@ -27,13 +27,13 @@ class PushMore
   def initialize(body, key: nil)
     @body = body
 
-    return unless enabled?
+    return if PushMore.configuration.enabled == false
 
     @key = key || PushMore.configuration.api_key || ENV.fetch("PUSH_MORE_KEY")
   end
 
   def deliver
-    return unless enabled?
+    return if PushMore.configuration.enabled == false
 
     http = Net::HTTP.new(webhook_uri.host, webhook_uri.port)
     http.use_ssl = true
@@ -52,10 +52,6 @@ class PushMore
   end
 
   private
-
-  def enabled?
-    PushMore.configuration.enabled != false
-  end
 
   def webhook_uri
     URI.parse WEBHOOK_BASE_URL + @key
